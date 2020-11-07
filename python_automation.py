@@ -29,9 +29,9 @@ def config_hadoop():
     nn = input("Enter Name Node's IP: ")
     cmd = "scp -r /root/Downloads/hadoop root@" + nn + ":/root/Downloads/"
     os.system(cmd)
-    cmd = "ssh root@" + nn + "rpm -ivh /root/Downloads/hadoop/jdk-8u171-linux-x64.rpm"
+    cmd = "ssh root@" + nn + " rpm -ivh /root/Downloads/hadoop/jdk-8u171-linux-x64.rpm"
     os.system(cmd)
-    cmd = "ssh root@" + nn + "rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
+    cmd = "ssh root@" + nn + " rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
     os.system(cmd)
 
     dnn = int(input("Number of Data Nodes: "))
