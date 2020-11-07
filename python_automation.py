@@ -1,6 +1,6 @@
 # Note:
-# epel-release-latest-8.noarch.rpm needs to be present at /root/Downloads/autm_t7/ in the controler system
-# jdk-8u171-linux-x64.rpm and hadoop-1.2.1-1.x86_64.rpm needs to be present at /root/Downloads/autm_t7/hadoop in the controler system
+# epel-release-latest-8.noarch.rpm needs to be present at /root/Downloads in the controler system
+# jdk-8u171-linux-x64.rpm and hadoop-1.2.1-1.x86_64.rpm needs to be present at /root/Downloads/hadoop in the controler system
 
 import os
 
@@ -34,19 +34,14 @@ def config_hadoop():
     cmd = "ssh root@" + nn + " rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
     os.system(cmd)
     
-    nt = "dfs.name.dir"
-    vt = "/nn"
-    name_tag = "<name>" + nt + "</name>\n"
-    value_tag = "<value>" + vt + "</value>\n"
-    hdfs_file_lines = ['<?xml version="1.0"?>\n', '<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>\n',
-     '\n', '<!-- Put site-specific property overrides in this file. -->\n', '\n', "<configuration>\n", '<property>\n',
-      name_tag, value_tag, '</property>\n', "</configuration>"]
-    hdfs_file = open("hdfs-site.xml", "w")
-    hdfs_file.writelines(hdfs_file_lines)
-    hdfs_file.close()
+    file_handling(nn, 'dfs.name.dir', '/nn', 'hdfs-site.xml')
+    file_handling(nn, 'fs.default.name', 'hdfs://0.0.0.0:9001' , 'core-site.xml')
 
-    #transport this file to NN using scp in os.system 
-    cmd = "scp hdfs-site.xml root@" + nn + ":/etc/hadoop"
+    cmd = "ssh root@" + nn + " mkdir /nn"
+    os.system(cmd)
+    cmd = "ssh root@" + nn + " hadoop namenode -format"
+    os.system(cmd)
+    cmd = "ssh root@" + nn + " hadoop-daemon.sh start namenode"
     os.system(cmd)
 
     dnn = int(input("Number of Data Nodes: "))
@@ -59,6 +54,33 @@ def config_hadoop():
         cmd = "ssh root@" + dn + " rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
         os.system(cmd)
 
+        dn_dir = '/dn' + str(i+1)
+        file_handling(dn, 'dfs.data.dir', dn_dir, 'hdfs-site.xml')
+        nn_ip = 'hdfs://' + nn + ':9001'
+        file_handling(dn, 'fs.default.name', nn_ip , 'core-site.xml')
+
+        cmd = "ssh root@" + dn + " mkdir " + dn_dir
+        os.system(cmd)
+        cmd = "ssh root@" + dn + " hadoop-daemon.sh start datanode"
+        os.system(cmd)
+
+
+def file_handling(node_ip, name_t, value_t, file_name):
+
+    name_tag = '<name>' + name_t + '</name>\n'
+    value_tag = '<value>' + value_t + '</value>\n'
+
+    hdfs_file_lines = ['<?xml version="1.0"?>\n', '<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>\n',
+     '\n', '<!-- Put site-specific property overrides in this file. -->\n', '\n', '<configuration>\n', '<property>\n',
+      name_tag, value_tag, '</property>\n', '</configuration>\n']
+
+    hdfs_file = open(file_name, "w")
+    hdfs_file.writelines(hdfs_file_lines)
+    hdfs_file.close()
+
+    cmd = "scp " + file_name + " root@" + node_ip + ":/etc/hadoop"
+    os.system(cmd)
+    cmd = "ssh root@" + node_ip + " systemctl stop firewalld"
 
 
 def Aws_cli():
@@ -127,7 +149,7 @@ def Aws_cli():
 			os.system("aws ec2 attach-volume  --volume-id {}  --instance-id {} --device {}".format(vol_id , ins_id , dev_name)
 			)
 		elif ch==11:
-			break
+			exit()
 		
 		input("press enter to continue to AWS CLI menu")
 
@@ -154,7 +176,7 @@ while True:
     
     elif user_choice1 == 3:
         Aws_cli()
-        
+
     # add extra functionalities here inside elif
 
     else:
