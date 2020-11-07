@@ -46,26 +46,84 @@ def config_hadoop():
 
 while True:
 
-    print("""Welcome
-    Enter your choice:
-    Press 1: To configure yum repository
-    Press 2: To setup a hadoop cluster
+	print("""Welcome
+	Enter your choice:
+	Press 1: To configure yum repository
+	Press 2: To setup a hadoop cluster
+	press 3: To install AWS CLI
+	press 4: To check the AWS CLI version
+	press 5: To configure ASW CLI
+	press 6: To describe all instances
+	press 7: To describe a specific instance
+	press 8: To create an EC2 instance
+	press 9: To start an EC2 instance
+	press 10: To stop an EC2 instance
+	press 11: To create an EBS volume
+	press 12: To attach an EBS volume
 
-    """)
+	""")
 
-    user_choice1 = int(input("Enter your choice here: "))
-    
-    if user_choice1 == 1:
-        config_yum()   
+	user_choice1 = int(input("Enter your choice here: "))
+	    
+	if user_choice1 == 1:
+		config_yum()   
 
-    elif user_choice1 == 2:
-        config_hadoop()
-    
-    # add extra functionalities here inside elif
+	elif user_choice1 == 2:
+		config_hadoop()
 
-    else:
-        print("Invalid Input")
-    
-    choice_to_loop = input("Press 'y' to continue or 'n' to quit: ")
-    if choice_to_loop != 'y' and choice_to_loop != 'Y':
-        break
+	elif user_choice1 == 3:
+		os.system("pip3 install awscli --upgrade --user") 
+		       
+	elif user_choice1 == 4:
+		os.system("aws --version")
+
+	elif user_choice1 == 5:
+		os.system("aws configure")
+
+	elif user_choice1 == 6:
+		os.system("aws ec2 describe-instances")
+
+	elif user_choice1 == 7:
+		ins_id = input("enter the instance id: ")
+		os.system("aws ec2 describe-instance-status --instance-id {}".format(ins_id))
+
+	elif user_choice1 == 8:
+		img_id = input("Enter image ID: ")
+		ins_type = input("Enter instance type: ")
+		cnt = input("Enter the number of instances you want to launch: ")
+		key_nm = input("Enter AWS key name: ")
+		sec_id = input("Enter security group ids: ")
+		sub_id = input("Enter subnet id: ")
+			
+		os.system("asw ec2 run-instances  --image-id {} --instance-type {} --count {} --key-name {} --security-group-ids {} --subnet-id {}".format(img_id , ins_type , cnt , key_nm , sec_id , sub_id))
+
+	elif user_choice1 == 9:
+		ins_id = input("Enter instance Id: ")
+		os.system(" aws ec2 start-instances --instance-ids {} ".format(ins_id))
+
+	elif user_choice1 == 10:
+		ins_id = input("Enter instance Id: ")
+		os.system(" aws ec2 stop-instances --instance-ids {} ".format(ins_id))
+
+	elif user_choice1 == 11:
+		size = input("Enter the size of stotage in GB: ")
+		vol_type = input("Enter volume type: ")
+		av_zone = input("Enter the availability zone: ")
+		os.system("aws ec2 create-volume --size {} --volume-type {} --availability-zone {}".format(size , vol_type , av_zone))
+
+	elif user_choice1 == 12:
+		vol_id = input("Enter your EBS volume Id: ")
+		ins_id = input("Enter your EC2 instance Id: ")
+		dev_name = input("Enter your EBS storage name: ")
+		os.system("aws ec2 attach-volume  --volume-id {}  --instance-id {} --device {}".format(vol_id , ins_id , dev_name)
+			)
+		
+	    
+	# add extra functionalities here inside elif
+
+	else:
+		print("Invalid Input")
+	    
+	choice_to_loop = input("Press 'y' to continue or 'n' to quit: ")
+	if choice_to_loop != 'y' and choice_to_loop != 'Y':
+		break
