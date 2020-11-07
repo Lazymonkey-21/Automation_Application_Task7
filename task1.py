@@ -15,6 +15,7 @@ while True:
 	press7: To start an EC2 instance
 	press8: To stop an EC2 instance
 	press9: To create an EBS volume
+	press10: To attach an EBS volume
 	""")
 
 	ch = int(input("enter your choice here:"))
@@ -59,6 +60,13 @@ while True:
 		av_zone = input("Enter the availability zone: ")
 		os.system("aws ec2 create-volume --size {} --volume-type {} --availability-zone {}".format(size , vol_type , av_zone))
 
+	elif ch==10:
+		vol_id = input("Enter your EBS volume Id: ")
+		ins_id = input("Enter your EC2 instance Id: ")
+		dev_name = input("Enter your EBS storage name: ")
+		os.system("aws ec2 attach-volume  --volume-id {}  --instance-id {} --device {}".format(vol_id , ins_id , dev_name)
+		)
+	
 	input("press enter to continue to menu")
 
 
