@@ -33,7 +33,7 @@ def config_hadoop():
     os.system(cmd)
     cmd = "ssh root@" + nn + " rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
     os.system(cmd)
-    '''
+    
     nt = "dfs.name.dir"
     vt = "/nn"
     name_tag = "<name>" + nt + "</name>\n"
@@ -46,8 +46,8 @@ def config_hadoop():
     hdfs_file.close()
 
     #transport this file to NN using scp in os.system 
-    cmd = "scp -r hdfs-site.xml root@" + nn + ":/etc/hadoop/"
-    os.system(cmd)'''
+    cmd = "scp hdfs-site.xml root@" + nn + ":/etc/hadoop"
+    os.system(cmd)
 
     dnn = int(input("Number of Data Nodes: "))
     for i in range(dnn):
