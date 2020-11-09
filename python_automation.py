@@ -268,38 +268,29 @@ def Aws_cli():
 
 while True:
 
-<<<<<<< HEAD
 	print("""Welcome
 	Enter your choice:
 	Press 1: To configure yum repository
 	Press 2: To setup a hadoop cluster
 	press 3: To access AWS CLI
-=======
-    print("""Welcome
-    Enter your choice:
-    Press 1: To configure yum repository
-    Press 2: To setup a hadoop cluster
-    press 3: To access AWS CLI
-    press 4: To acess docker services
->>>>>>> 945930750076b4cbfa8c203b6bc55a0b4feb38df
-
+	press 4: To acess docker services
 	""")
 
-	user_choice1 = int(input("Enter your choice here: "))
-	    
-	if user_choice1 == 1:
-		config_yum()   
+	user_choice1 = int(input("Enter your choice: "))
 
-<<<<<<< HEAD
+	if user_choice1 == 1:
+		config_yum()
+
 	elif user_choice1 == 2:
 		config_hadoop()
 
 	elif user_choice1 == 3:
 		Aws_cli()
 
+	elif user_choice1 == 4:
+		docker()
 
-	    
-	# add extra functionalities here inside elif
+	    # add extra functionalities here inside elif
 
 	else:
 		print("Invalid Input")
@@ -307,21 +298,3 @@ while True:
 	choice_to_loop = input("Press 'y' to continue or 'n' to quit: ")
 	if choice_to_loop != 'y' and choice_to_loop != 'Y':
 		break
-=======
-    elif user_choice1 == 2:
-        config_hadoop()
-    
-    elif user_choice1 == 3:
-        Aws_cli()
-    elif user_choice1 == 4:
-        docker()
-
-    # add extra functionalities here inside elif
-
-    else:
-        print("Invalid Input")
-    
-    choice_to_loop = input("Press 'y' to continue or 'n' to quit: ")
-    if choice_to_loop != 'y' and choice_to_loop != 'Y':
-        break
->>>>>>> 945930750076b4cbfa8c203b6bc55a0b4feb38df
