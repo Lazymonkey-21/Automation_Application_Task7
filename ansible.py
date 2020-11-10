@@ -1,5 +1,10 @@
 import os
 
+def file_handling_ansible():
+	fh = open('/root/ip.txt','w')
+	fh.write('')	
+	
+
 while True:
     print("""
         ANSIBLE OPERATIONS
