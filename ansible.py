@@ -1,5 +1,15 @@
 import os
 
+def file_handling_ansible():
+    ip_address = input("Enter IP address of client device: ")    
+    username = input("Enter the user name of client device: ")
+    password = input("Enter the password of client device: ")
+
+    fh = open('root/ip.txt', 'w')
+    fh.write('{}  ansible_ssh_user = {}  ansible_ssh_pass = {}'.format(ip_address , username , password))
+    fh.close()
+
+
 while True:
     print("""
         ANSIBLE OPERATIONS
