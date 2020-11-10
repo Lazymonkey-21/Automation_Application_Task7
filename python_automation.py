@@ -62,63 +62,78 @@ def config_yum():
     else:
         print("Invalid Input")
 
-
 def config_hadoop():
     nn = input("Enter Name Node's IP: ")
-    cmd = "scp -r /root/Downloads/autm_t7/hadoop root@" + nn + ":/root/Downloads/"
-    os.system(cmd)
-    cmd = "ssh root@" + nn + " rpm -ivh /root/Downloads/hadoop/jdk-8u171-linux-x64.rpm"
-    os.system(cmd)
-    cmd = "ssh root@" + nn + " rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
-    os.system(cmd)
-    
-    file_handling(nn, 'dfs.name.dir', '/nn', 'hdfs-site.xml')
-    file_handling(nn, 'fs.default.name', 'hdfs://0.0.0.0:9001' , 'core-site.xml')
-
-    cmd = "ssh root@" + nn + " mkdir /nn"
-    os.system(cmd)
-    cmd = "ssh root@" + nn + " hadoop namenode -format"
-    os.system(cmd)
-    cmd = "ssh root@" + nn + " hadoop-daemon.sh start namenode"
-    os.system(cmd)
+    hadoop_pyscript(nn, 'dfs.name.dir', '/nn', 'N', 0)
 
     dnn = int(input("Number of Data Nodes: "))
     for i in range(dnn):
         dn = input("Enter Data Node {}'s IP: ".format(i+1))
-        cmd = "scp -r /root/Downloads/autm_t7/hadoop root@" + dn + ":/root/Downloads/"
-        os.system(cmd)
-        cmd = "ssh root@" + dn + " rpm -ivh /root/Downloads/hadoop/jdk-8u171-linux-x64.rpm"
-        os.system(cmd)
-        cmd = "ssh root@" + dn + " rpm -ivh /root/Downloads/hadoop/hadoop-1.2.1-1.x86_64.rpm  --force"
-        os.system(cmd)
+        dn_dir = '/dn' + (i+1)
+        hadoop_pyscript(dn, 'dfs.data.dir', dn_dir, 'D', i+1)
 
-        dn_dir = '/dn' + str(i+1)
-        file_handling(dn, 'dfs.data.dir', dn_dir, 'hdfs-site.xml')
-        nn_ip = 'hdfs://' + nn + ':9001'
-        file_handling(dn, 'fs.default.name', nn_ip , 'core-site.xml')
-
-        cmd = "ssh root@" + dn + " mkdir " + dn_dir
-        os.system(cmd)
-        cmd = "ssh root@" + dn + " hadoop-daemon.sh start datanode"
-        os.system(cmd)
+    client = int(input("Number of Client Nodes: "))
+    for i in range(client):
+        client_ip = input("Enter Client {}'s IP: ".format(i+1))
+        hadoop_pyscript(client_ip, '', '', 'C', 0)
 
 
-def file_handling(node_ip, name_t, value_t, file_name):
+def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
+    ip = '"' + ip + '"'
+    line_8 = 'nn_ip = ' + ip + '\n'
+    line_9 = 'file_handling("' + hdfs_name_tag + '", "'+ hdfs_value_tag + '", "hdfs-site.xml")\n'
+    pyscript = ['import os\n', 
+    'os.system("pip3 install gdown")\n', 
+    'os.system("gdown --id 1S7rpt9ituQQF8R0kYxWYMhfsmWPL3BOe")\n', 
+    'os.system("gdown --id 15M3sTqRfiP8WKsHFNOcfK9IggRsd5ZEu")\n', 
+    'os.system("rpm -ivh /root/jdk-8u171-linux-x64.rpm")\n', 
+    'os.system("rpm -ivh /root/hadoop-1.2.1-1.x86_64.rpm --force")\n', 
+    '\n', 
+    'def file_handling(name_tag, value_tag, file_name):\n', 
+    '\tname_tag = "<name>" + name_tag + "</name>\\n"\n', 
+    '\tvalue_tag = "<value>" + value_tag + "</value>\\n"\n', 
+    '\tdir = "/etc/hadoop/" + file_name\n', 
+    '\n', 
+    '\thdfs_file_lines = [\'<?xml version="1.0"?>\\n\', \'<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>\\n\',\n', 
+    '\t\'\\n\', \'<!-- Put site-specific property overrides in this file. -->\\n\', \'\\n\', \'<configuration>\\n\', \'<property>\\n\',\n', 
+    '\tname_tag, value_tag, \'</property>\\n\', \'</configuration>\\n\']\n', 
+    '\n', 
+    '\thdfs_file = open(dir, "w")\n', 
+    '\thdfs_file.writelines(hdfs_file_lines)\n', 
+    '\thdfs_file.close()\n'
+    '\n',
+    line_8, 
+    line_9, 
+    'value_tag = "hdfs://" + nn_ip + ":9001"\n', 
+    'file_handling("fs.default.name", value_tag , "core-site.xml")\n', 
+    '\n']
 
-    name_tag = '<name>' + name_t + '</name>\n'
-    value_tag = '<value>' + value_t + '</value>\n'
+    if node_type == 'N':
+        pyscript.append('\nos.system("rm -rf /nn")')
+        pyscript.append('\nos.system("mkdir /nn")')
+        pyscript.append('\nos.system("hadoop namenode -format")')
+        pyscript.append('\nos.system("systemctl stop firewalld")')
+        pyscript.append('\nos.system("hadoop-daemon.sh start namenode")')
+    elif node_type == 'D':
+        cmd = 'rm -rf /dn' + str(dn_no)
+        pyscript.append(cmd)
+        cmd = '\nos.system("mkdir /dn'+ str(dn_no) +'")'
+        pyscript.append(cmd)
+        pyscript.append('\nos.system("systemctl stop firewalld")')
+        pyscript.append('\nos.system("hadoop-daemon.sh start datanode")')
+    elif node_type == 'C':
+        pyscript.pop(21)
+        pyscript.append('\nos.system("systemctl stop firewalld")')
+        #pyscript.append('\nos.system("hadoop-daemon.sh start namenode")')
 
-    hdfs_file_lines = ['<?xml version="1.0"?>\n', '<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>\n',
-     '\n', '<!-- Put site-specific property overrides in this file. -->\n', '\n', '<configuration>\n', '<property>\n',
-      name_tag, value_tag, '</property>\n', '</configuration>\n']
-
-    hdfs_file = open(file_name, "w")
-    hdfs_file.writelines(hdfs_file_lines)
+    hdfs_file = open('imp.py', 'w')
+    hdfs_file.writelines(pyscript)
     hdfs_file.close()
 
-    cmd = "scp " + file_name + " root@" + node_ip + ":/etc/hadoop"
+    cmd = "scp imp.py root@" + ip + ":/root"
     os.system(cmd)
-    cmd = "ssh root@" + node_ip + " systemctl stop firewalld"
+    cmd = "ssh root@" + ip + " python3 /root/imp.py"
+    os.system(cmd)
 
 
 def Aws_cli():
