@@ -170,7 +170,7 @@ def Aws_cli():
 		os.system("clear")
 		print("""Welcome to AWS automation 
 		press 1: To install AWS CLI
-		press 2:	To check the AWS CLI version
+		press 2: To check the AWS CLI version
 		press 3: To configure ASW CLI
 		press 4: To describe all instances
 		press 5: To describe a specific instance
@@ -235,6 +235,16 @@ def Aws_cli():
 		
 		input("press enter to continue to AWS CLI menu")
         
+##################################Ansible#########################################
+
+def ansible_config():
+    os.system('rm -rf /etc/ansible /root/ansible_inventory')
+    os.system('mkdir /etc/ansible')
+    os.system('mkdir /root/ansible_inventory')
+    os.system('touch /root/ansible_inventory/ip.txt')
+    fh = open('/etc/ansible/ansible.cfg','w')
+    fh.write('[defaults]\ninventory = /root/ansible_inventory/ip.txt\nhost_key_checking = false \n')
+    fh.close()
 
 def write_inventory(group_name, mode):
 
@@ -279,6 +289,33 @@ Enter your choice here: '''))
     else:
         print('Invalid Choice')
 
+def ansible_services():
+	while True:
+		print("""
+ANSIBLE OPERATIONS
+
+Press 1: TO install ansible
+Press 2: TO COnfigure ansible
+Press 3: TO enter IP, username and password of the system on which you want run commands using ansible
+Press 4: Enter your ansible commands
+Press 5: To exit from ansible menu
+""")
+		ch = int(input("Enter your choice: "))
+		if ch == 1:
+			os.system ("pip3 install ansible")
+		elif ch == 2:
+			ansible_config()
+		elif ch == 3:
+			file_handling_ansible()
+		elif ch == 4:
+			cmd = input("Enter your ansible commands: ")
+			os.system(cmd)
+		elif ch == 5:
+			break
+		
+		input("\nPress enter to continue: ")
+	
+###########################################################################
 
 while True:
 
@@ -306,7 +343,7 @@ while True:
         docker()
 
     elif user_choice1 == 5:
-        file_handling_ansible()
+        ansible_services()
 
     # add extra functionalities here inside elif
 
