@@ -1,14 +1,10 @@
 import os
 
-<<<<<<< HEAD
-def file_handling_ansible():
-	fh = open('/root/ip.txt','w')
-	fh.write('')	
-	
-=======
+
 def ansible_config():
+    os.system("mkdir /etc/ansible")
     fh = open('/etc/ansible/ansible.cfg','w+')
-    fh.write('[defaults] \n inventory = /root/ip.txt \n host_key_checking = false \n')
+    fh.write('[defaults]\ninventory = /root/ip.txt\nhost_key_checking = false \n')
     fh.close()
 
 def file_handling_ansible():
@@ -16,11 +12,10 @@ def file_handling_ansible():
     username = input("Enter the user name of client device: ")
     password = input("Enter the password of client device: ")
 
-    fh = open('root/ip.txt','w+')
+    fh = open('/root/ip.txt','w')
     fh.write('{}  ansible_ssh_user = {}  ansible_ssh_pass = {}'.format(ip_address , username , password))
     fh.close()    
 
->>>>>>> f44d403acd8bbeeb28d7475314ce7bc6713c4108
 
 while True:
     print("""
@@ -38,10 +33,10 @@ while True:
         os.system ("pip3 install ansible")
 
     elif ch == 2:
-        print("COnfigure ansible")
+        ansible_config()
 
     elif ch == 3:
-        print("TO enter IP, username and password of the system on which you want run commands using ansible")
+        file_handling_ansible()
 
     elif ch == 4:
         print("Enter your ansible commands")
