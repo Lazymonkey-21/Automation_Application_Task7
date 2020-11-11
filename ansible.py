@@ -2,8 +2,8 @@ import os
 
 
 def ansible_config():
-    os.system("mkdir /etc/ansible")
-    fh = open('/etc/ansible/ansible.cfg','w+')
+    
+    fh = open('/etc/ansible/ansible.cfg','w')
     fh.write('[defaults]\ninventory = /root/ip.txt\nhost_key_checking = false \n')
     fh.close()
 
@@ -39,9 +39,13 @@ while True:
         file_handling_ansible()
 
     elif ch == 4:
-        print("Enter your ansible commands")
+	cmd = input("Enter your ansible commands: ")
+	os.system("cmd")
 
     elif ch == 5:
+	exit()
+	
+    input("press enter to continue: ")
         exit
     
     break
