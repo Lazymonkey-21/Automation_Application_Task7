@@ -58,21 +58,6 @@ def config_yum():
     else:
         print("Invalid Input")
 
-def config_hadoop():
-    nn = input("Enter Name Node's IP: ")
-    hadoop_pyscript(nn, 'dfs.name.dir', '/nn', 'N', 0)
-
-    dnn = int(input("Number of Data Nodes: "))
-    for i in range(dnn):
-        dn = input("Enter Data Node {}'s IP: ".format(i+1))
-        dn_dir = '/dn' + (i+1)
-        hadoop_pyscript(dn, 'dfs.data.dir', dn_dir, 'D', i+1)
-
-    client = int(input("Number of Client Nodes: "))
-    for i in range(client):
-        client_ip = input("Enter Client {}'s IP: ".format(i+1))
-        hadoop_pyscript(client_ip, '', '', 'C', 0)
-
 
 def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
     ip = '"' + ip + '"'
@@ -130,6 +115,54 @@ def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
     os.system(cmd)
     cmd = "ssh root@" + ip + " python3 /root/imp.py"
     os.system(cmd)
+
+
+def config_hadoop():
+    nn = input("Enter Name Node's IP: ")
+    hadoop_pyscript(nn, 'dfs.name.dir', '/nn', 'N', 0)
+
+    dnn = int(input("Number of Data Nodes: "))
+    for i in range(dnn):
+        dn = input("Enter Data Node {}'s IP: ".format(i+1))
+        dn_dir = '/dn' + (i+1)
+        hadoop_pyscript(dn, 'dfs.data.dir', dn_dir, 'D', i+1)
+
+    client = int(input("Number of Client Nodes: "))
+    for i in range(client):
+        client_ip = input("Enter Client {}'s IP: ".format(i+1))
+        hadoop_pyscript(client_ip, '', '', 'C', 0)
+
+
+#-----------------Work in progress-----------------------------#
+def hadoop_client_services():
+    choice = int(input('''Available hadoop client services:
+    Press 1: To see dfs report
+    Press 2: To list files in 
+    
+    Enter your choice here: '''))
+#---------------------------------------------------------------#
+
+def hapoop_services():
+    choice = int(input('''Available hadoop services:
+    Press 1: To setup a cluster
+    Press 2: To use WebUI
+    Press 2: To access hadoop client services
+    
+    Enter your choice here: '''))
+
+    if choice == 1:
+        config_hadoop()
+
+    elif choice == 2:
+        nn_IP = input('Enter the IP of your cluster\'s Name Node: ')
+        cmd = 'firefox ' + nn_IP + ':50070'
+        os.system(cmd) 
+
+    elif choice == 3:
+        hadoop_client_services()
+
+    else:
+        print('Invalid Choice')
 
 
 def Aws_cli():
@@ -201,21 +234,6 @@ def Aws_cli():
 			exit()
 		
 		input("press enter to continue to AWS CLI menu")
-
-
-def file_handling_ansible():
-    group = int(input('''Press 1 to create a new group: 
-    \t\t\t\tOr
-    Press 2 to add to an existing group:
-    '''))
-    group_name = input('Enter the group name without using "[]": ')
-    group_name = '[' + group_name + ']\n'
-
-    if group == 1:
-        write_inventory(group_name, 'N')
-
-    elif group_name == 2:
-        write_inventory(group_name, 'E')
         
 
 def write_inventory(group_name, mode):
@@ -244,12 +262,30 @@ def write_inventory(group_name, mode):
         fh.close()
 
 
+def file_handling_ansible():
+    group = int(input('''Press 1 to create a new group: 
+    \t\t\t\tOr
+    Press 2 to add to an existing group:
+    '''))
+    group_name = input('Enter the group name without using "[]": ')
+    group_name = '[' + group_name + ']\n'
+
+    if group == 1:
+        write_inventory(group_name, 'N')
+
+    elif group_name == 2:
+        write_inventory(group_name, 'E')
+
+    else:
+        print('Invalid Choice')
+
+
 while True:
 
     print("""Welcome
     Enter your choice:
     Press 1: To configure yum repository
-    Press 2: To setup a hadoop cluster
+    Press 2: To access hadoop services
     press 3: To access AWS CLI
     press 4: To acess docker services
     press 5: To access ansible services
@@ -261,7 +297,7 @@ while True:
         config_yum()   
 
     elif user_choice1 == 2:
-        config_hadoop()
+        hapoop_services()
     
     elif user_choice1 == 3:
         Aws_cli()
