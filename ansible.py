@@ -1,5 +1,8 @@
 import os
 
+os.system("tput setaf 3")
+os.system("tput setaf 7")
+
 
 def ansible_config():
     
@@ -26,7 +29,7 @@ while True:
         press 3: TO enter IP, username and password of the system on which you want run commands using ansible
         press 4: Enter your ansible commands
         press 5: To exit from ansible menu
-    """)
+        """)
     ch = int(input("Enter your choice: "))
 
     if ch == 1:
@@ -39,13 +42,13 @@ while True:
         file_handling_ansible()
 
     elif ch == 4:
-	cmd = input("Enter your ansible commands: ")
-	os.system("cmd")
+	    cmd = input("Enter your ansible commands: ")
+	    os.system("cmd")
 
     elif ch == 5:
-	exit()
+	    exit()
 	
     input("press enter to continue: ")
-        exit
     
-    break
+    
+    
