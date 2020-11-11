@@ -2,7 +2,7 @@ import os
 
 def ansible_config():
     fh = open('/etc/ansible/ansible.cfg','w+')
-    fh.write('[defaults] \n inventory = /root/ip.txt \n gpgcheck = 0 \n')
+    fh.write('[defaults] \n inventory = /root/ip.txt \n host_key_checking = false \n')
     fh.close()
 
 def file_handling_ansible():
