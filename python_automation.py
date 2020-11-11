@@ -38,7 +38,7 @@ def docker():
 			break
 
 
-def config_yum():
+def config_yum():      #to be modified
     sys = int(input("""Where do you want to configure yum:
     Press 1 for local system
     Press 2 for remote system
@@ -263,10 +263,10 @@ def write_inventory(group_name, mode):
 
 
 def file_handling_ansible():
-    group = int(input('''Press 1 to create a new group: 
-    \t\t\t\tOr
-    Press 2 to add to an existing group:
-    '''))
+    group = int(input('''Press 1: To create a new group
+Press 2: To add to an existing group
+
+Enter your choice here: '''))
     group_name = input('Enter the group name without using "[]": ')
     group_name = '[' + group_name + ']\n'
 
