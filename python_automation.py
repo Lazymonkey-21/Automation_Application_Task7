@@ -38,22 +38,34 @@ def docker():
 			break
 
 
-def config_yum():      #to be modified
+def config_yum():
     sys = int(input("""Where do you want to configure yum:
     Press 1 for local system
     Press 2 for remote system
+
     Enter your choice here: """))
 
+    if sys == 1 or sys == 2:
+        print('\n--------------Updating python3 library (gdown)--------------\n')
+        os.system('pip3 install gdown')
+        print('''\n--------------Downloading repo data. Please wait--------------
+It may take a bit longer, please don't quit
+''')
+        os.system("gdown --id 1GAKatKIF00qdBIfkpr6N4tT5H3AYsu8y")
+
     if sys == 1:
-        cmd = "rpm -ivh /root/Downloads/autm_t7/epel-release-latest-8.noarch.rpm"
+        print('\n--------------Updating yum repository--------------\n')
+        cmd = "rpm -ivh epel-release-latest-8.noarch.rpm"
         os.system(cmd)
+        
     elif sys == 2:
         total_remote_sys = int(input("Enter the number of remote systems: "))
         for i in range(total_remote_sys):
             remote_sys_IP = input("Enter Remote System's IP: ")
-            cmd = "scp /root/Downloads/autm_t7/epel-release-latest-8.noarch.rpm root@" + remote_sys_IP + ":/root/Downloads/"
+            cmd = "scp epel-release-latest-8.noarch.rpm root@" + remote_sys_IP + ":/root"
             os.system(cmd)
-            cmd = "ssh root@" + remote_sys_IP + " rpm -ivh /root/Downloads/epel-release-latest-8.noarch.rpm"
+            print('\n--------------Updating yum repository--------------\n')
+            cmd = "ssh root@" + remote_sys_IP + " rpm -ivh /root/epel-release-latest-8.noarch.rpm"
             os.system(cmd)
     else:
         print("Invalid Input")
