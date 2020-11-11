@@ -282,14 +282,14 @@ Enter your choice here: '''))
 def ansible_services():
 	while True:
 		print("""
-ANSIBLE OPERATIONS
+		ANSIBLE OPERATIONS
 
-Press 1: TO install ansible
-Press 2: TO COnfigure ansible
-Press 3: TO enter IP, username and password of the system on which you want run commands using ansible
-Press 4: Enter your ansible commands
-Press 5: To exit from ansible menu
-""")
+		Press 1: TO install ansible
+		Press 2: TO COnfigure ansible
+		Press 3: TO enter IP, username and password of the system on which you want run commands using ansible
+		Press 4: Enter your ansible commands
+		Press 5: To exit from ansible menu
+		""")
 		ch = int(input("Enter your choice: "))
 		if ch == 1:
 			os.system ("pip3 install ansible")
@@ -318,31 +318,27 @@ while True:
     press 5: To access ansible services
     """)
 
-	if user_choice1 == 1:
-		config_yum()
+    user_choice1 = int(input("Enter your choice: "))
+
+    if user_choice1 == 1:
+        config_yum()
 
     elif user_choice1 == 2:
-        hapoop_services()
-    
+	    hapoop_services()
+
     elif user_choice1 == 3:
-        Aws_cli()
+	    Aws_cli()
 
     elif user_choice1 == 4:
-        docker()
+	    docker()
 
     elif user_choice1 == 5:
-        ansible_services()
+	    ansible_services()
 
     # add extra functionalities here inside elif
-
-	elif user_choice1 == 4:
-		docker()
-
-	    # add extra functionalities here inside elif
-
-	else:
-		print("Invalid Input")
+    else:
+	    print("Invalid Input")
 	    
-	choice_to_loop = input("Press 'y' to continue or 'n' to quit: ")
-	if choice_to_loop != 'y' and choice_to_loop != 'Y':
-		break
+    choice_to_loop = input("Press 'y' to continue or 'n' to quit: ")
+    if choice_to_loop != 'y' and choice_to_loop != 'Y':
+        break
