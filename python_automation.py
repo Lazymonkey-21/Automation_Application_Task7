@@ -1,7 +1,3 @@
-# Note:
-# epel-release-latest-8.noarch.rpm needs to be present at /root/Downloads in the controler system
-# jdk-8u171-linux-x64.rpm and hadoop-1.2.1-1.x86_64.rpm needs to be present at /root/Downloads/hadoop in the controler system
-
 import os
 def docker():
 	print("Welcome to Docker services")
@@ -207,6 +203,45 @@ def Aws_cli():
 		input("press enter to continue to AWS CLI menu")
 
 
+def file_handling_ansible():
+    group = int(input('''Press 1 to create a new group: 
+    \t\t\t\tOr
+    Press 2 to add to an existing group:
+    '''))
+    group_name = input('Enter the group name without using "[]": ')
+    group_name = '[' + group_name + ']\n'
+
+    if group == 1:
+        write_inventory(group_name, 'N')
+
+    elif group_name == 2:
+        write_inventory(group_name, 'E')
+        
+
+def write_inventory(group_name, mode):
+
+    ip_address = input("Enter IP address of client device: ")    
+    username = input("Enter the user name of client device: ")
+    password = input("Enter the password of client device: ")
+
+    file_lines = ['{}  ansible_ssh_user={}  ansible_ssh_pass={}\n'.format(ip_address , username , password)]
+
+    if mode == 'N':
+        fh = open('/root/ansible_inventory/ip.txt', 'a+')
+        fh.write(group_name)
+        fh.write(file_lines)
+        fh.close()
+    elif mode == 'E':
+        fh = open('/root/ansible_inventory/ip.txt', 'r')
+        all_lines = fh.readlines()
+        fh.close()
+        for i, line in enumerate(all_lines):
+            if group_name == line:
+                all_lines.insert(i+1, file_lines)
+                break
+        fh = open('/root/ansible_inventory/ip.txt', 'w+')
+        fh.write(all_lines)
+        fh.close()
 
 
 while True:
@@ -217,7 +252,7 @@ while True:
     Press 2: To setup a hadoop cluster
     press 3: To access AWS CLI
     press 4: To acess docker services
-
+    press 5: To access ansible services
     """)
 
     user_choice1 = int(input("Enter your choice here: "))
@@ -230,8 +265,12 @@ while True:
     
     elif user_choice1 == 3:
         Aws_cli()
+
     elif user_choice1 == 4:
         docker()
+
+    elif user_choice1 == 5:
+        file_handling_ansible()
 
     # add extra functionalities here inside elif
 
