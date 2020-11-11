@@ -133,20 +133,10 @@ def config_hadoop():
         hadoop_pyscript(client_ip, '', '', 'C', 0)
 
 
-#-----------------Work in progress-----------------------------#
-def hadoop_client_services():
-    choice = int(input('''Available hadoop client services:
-    Press 1: To see dfs report
-    Press 2: To list files in 
-    
-    Enter your choice here: '''))
-#---------------------------------------------------------------#
-
 def hapoop_services():
     choice = int(input('''Available hadoop services:
     Press 1: To setup a cluster
     Press 2: To use WebUI
-    Press 2: To access hadoop client services
     
     Enter your choice here: '''))
 
