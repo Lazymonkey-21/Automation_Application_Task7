@@ -16,7 +16,7 @@ def ansible_config():
 def file_handling_ansible():
     group = int(input('''Press 1 to create a new group: 
     \t\t\t\tOr
-    Press 2 to add to an existing group:'''))
+    \tPress 2 to add to an existing group:'''))
     group_name = input('Enter the group name without using "[]": ')
     group_name = '[' + group_name + ']\n'
 
