@@ -68,19 +68,3 @@ while True:
 		)
 	
 	input("press enter to continue to menu")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
