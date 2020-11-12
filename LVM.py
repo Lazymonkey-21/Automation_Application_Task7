@@ -20,7 +20,6 @@ while True:
 		Press 10: To Extend The Logical volume.
 		press 0: To Exit. 	
 
-
 [NOTE : Make sure to attach extra volume to your system  to work on logical volume management]	
 		""")
 		
