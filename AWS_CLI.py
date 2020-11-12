@@ -67,4 +67,4 @@ while True:
 		os.system("aws ec2 attach-volume  --volume-id {}  --instance-id {} --device {}".format(vol_id , ins_id , dev_name)
 		)
 	
-	input("press enter to continue to menu")
+	input("press enter to continue to menu..")
