@@ -46,23 +46,23 @@ def config_yum():
     Enter your choice here: """))
 
     if sys == 1 or sys == 2:
-        print('\n--------------Updating python3 library (gdown)--------------\n')
+        print('--------------Updating python3 library (gdown)--------------')
         os.system('pip3 install gdown')
         print('''\n--------------Downloading repo data. Please wait--------------
 It may take a bit longer, please don't quit
 ''')
-        os.system("gdown --id 1GAKatKIF00qdBIfkpr6N4tT5H3AYsu8y")
+        os.system('gdown --id 1uWr5LeoftXwC-r48oH0KW-lSCROXfkmADNuWIeHsGpw')
 
     if sys == 1:
-        print('\n--------------Updating yum repository--------------\n')
-        cmd = "rpm -ivh epel-release-latest-8.noarch.rpm"
+        print('--------------Updating yum repository--------------')
+        cmd = "rpm -ivh /root/epel-release-latest-8.noarch.rpm"
         os.system(cmd)
         
     elif sys == 2:
         total_remote_sys = int(input("Enter the number of remote systems: "))
         for i in range(total_remote_sys):
             remote_sys_IP = input("Enter Remote System's IP: ")
-            cmd = "scp epel-release-latest-8.noarch.rpm root@" + remote_sys_IP + ":/root"
+            cmd = "scp /root/epel-release-latest-8.noarch.rpm root@" + remote_sys_IP + ":/root"
             os.system(cmd)
             print('\n--------------Updating yum repository--------------\n')
             cmd = "ssh root@" + remote_sys_IP + " rpm -ivh /root/epel-release-latest-8.noarch.rpm"
@@ -117,7 +117,7 @@ def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
     elif node_type == 'C':
         pyscript.pop(20)
         pyscript.append('\nos.system("systemctl stop firewalld")')
-	
+
     hdfs_file = open('imp.py', 'w')
     hdfs_file.writelines(pyscript)
     hdfs_file.close()
@@ -194,9 +194,9 @@ def hadoop_client_services(ip):
     cmd = "scp hc_spript.py root@" + ip + ":/root"
     os.system(cmd)
     cmd = "ssh root@" + ip + " python3 /root/hc_spript.py"
-    os.system(cmd)	
-	
-	
+    os.system(cmd)
+    
+
 def hapoop_services():
     choice = int(input('''Available hadoop services:
     Press 1: To setup a cluster
