@@ -78,6 +78,6 @@ while True:
 	    os.system(cmd)
 
     elif ch == 5:
-	    exit()
+	    exit
 	
     input("press enter to continue: ")
