@@ -8,7 +8,6 @@ os.system("tput setaf 7")
 while True:
 
 	print("""
-
 		Press 1: To see available disks.
 		Press 2: To Create Physical Volume.		  
 		Press 3: To Display Physical Volume.	
