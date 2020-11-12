@@ -145,10 +145,64 @@ def config_hadoop():
         hadoop_pyscript(client_ip, '', '', 'C', 0)
 
 
+def hadoop_client_services(ip):
+
+    script_lines = ['import os\n', 
+    'while True:\n', 
+    '\tchoice = int(input(\'\'\'Available hadoop client services:\n', 
+    '\tPress 1: To see dfs report\n', 
+    '\tPress 2: To list files in cluster\n', 
+    '\tPress 3: To read a file\n', 
+    '\tPress 4: To upload a file\n', 
+    '\tPress 5: To exit\n', 
+    '\n', 
+    '\tEnter your choice here: \'\'\'))\n', 
+    '\n', 
+    '\tif choice == 1:\n', 
+    '\t\tos.system("hadoop dfsadmin -report")\n', 
+    '\telif choice == 2:\n', 
+    '\t\tdir = input("Directory (default /): ")\n', 
+    '\t\tif len(dir) == 0:\n', 
+    '\t\t\tdir = "/"\n', 
+    '\t\tcmd = "hadoop fs -ls " + dir\n', 
+    '\t\tos.system(cmd)\n', 
+    '\telif choice == 3:\n', 
+    '\t\tfile_name = input("Enter file name with extension and full path in the cluster: ")\n', 
+    '\t\tcmd = "hadoop fs -cat " + file_name\n', 
+    '\t\tos.system(cmd)\n', 
+    '\telif choice == 4:\n', 
+    '\t\tfile_name = input("Enter local file name with extension and it\'s full path in the local system: ")\n', 
+    '\t\tblock_size = int(input("Block size (default 64MB): "))\n', 
+    '\t\tif len(block_size) == 0:\n', 
+    '\t\t\tblock_size = 67108864\n', 
+    '\t\telse:\n', 
+    '\t\t\tblock_size = block_size * 1048576\n', 
+    '\t\tdir = input("Directory path where you want to upload (default /): ")\n', 
+    '\t\tif len(dir) == 0:\n', 
+    '\t\t\tdir = "/"\n', 
+    '\t\tcmd = "hadoop fs -Dfs.block.size=" + block_size + " -put " + file_name + " " + dir\n', 
+    '\telif choice == 5:\n', 
+    '\t\tbreak\n', 
+    '\telse:\n', 
+    '\t\tprint("Invalid Choice\\n")\n', 
+    '\tinput("Press enter to continue: ")\n']
+
+    client_script = open('hc_spript.py', 'w')
+    client_script.writelines(script_lines)
+    client_script.close()
+
+    print('\n--------------Establishing Connection--------------\n')
+    cmd = "scp hc_spript.py root@" + ip + ":/root"
+    os.system(cmd)
+    cmd = "ssh root@" + ip + " python3 /root/hc_spript.py"
+    os.system(cmd)	
+	
+	
 def hapoop_services():
     choice = int(input('''Available hadoop services:
     Press 1: To setup a cluster
     Press 2: To use WebUI
+    Press 3: To access hadoop client services
     
     Enter your choice here: '''))
 
@@ -161,7 +215,8 @@ def hapoop_services():
         os.system(cmd) 
 
     elif choice == 3:
-        hadoop_client_services()
+        cli_ip = input('\tEnter the IP of the Client: ')
+        hadoop_client_services(cli_ip)
 
     else:
         print('Invalid Choice')
