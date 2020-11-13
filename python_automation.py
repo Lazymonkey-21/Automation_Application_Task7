@@ -54,7 +54,7 @@ def config_yum():
         print('''\n--------------Downloading repo data. Please wait--------------
 It may take a bit longer, please don't quit
 ''')
-        os.system('gdown --id 1uWr5LeoftXwC-r48oH0KW-lSCROXfkmADNuWIeHsGpw')
+        os.system('gdown --id 1GAKatKIF00qdBIfkpr6N4tT5H3AYsu8y')
 
     if sys == 1:
         print('--------------Updating yum repository--------------')
