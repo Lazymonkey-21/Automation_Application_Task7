@@ -221,7 +221,7 @@ def hapoop_services():
         print('Invalid Choice')
 
 
-def Aws_cli():
+def aws_cli():
 	while True:
 		os.system("clear")
 		print("""Welcome to AWS automation 
@@ -481,7 +481,7 @@ while True:
         hapoop_services()
     
     elif user_choice1 == 3:
-	Aws_cli()
+	aws_cli()
 
     elif user_choice1 == 4:
         docker()
