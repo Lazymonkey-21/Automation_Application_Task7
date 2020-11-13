@@ -316,19 +316,25 @@ def write_inventory(group_name, mode):
     if mode == 'N':
         fh = open('/root/ansible_inventory/ip.txt', 'a+')
         fh.write(group_name)
-        fh.write(file_lines)
+        fh.write(file_lines[0])
         fh.close()
     elif mode == 'E':
         fh = open('/root/ansible_inventory/ip.txt', 'r')
         all_lines = fh.readlines()
         fh.close()
+
+        is_there = 0
         for i, line in enumerate(all_lines):
             if group_name == line:
-                all_lines.insert(i+1, file_lines)
+                is_there = 1
+                all_lines.insert(i+1, file_lines[0])
                 break
-        fh = open('/root/ansible_inventory/ip.txt', 'w+')
-        fh.write(all_lines)
-        fh.close()
+        if is_there == 1:
+            fh = open('/root/ansible_inventory/ip.txt', 'w+')
+            fh.writelines(all_lines)
+            fh.close()
+        else:
+            print('\nGroup not found')
 
 
 def file_handling_ansible():
@@ -342,7 +348,7 @@ Enter your choice here: '''))
     if group == 1:
         write_inventory(group_name, 'N')
 
-    elif group_name == 2:
+    elif group == 2:
         write_inventory(group_name, 'E')
 
     else:
