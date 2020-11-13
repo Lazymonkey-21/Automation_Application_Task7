@@ -58,14 +58,14 @@ It may take a bit longer, please don't quit
 
     if sys == 1:
         print('--------------Updating yum repository--------------')
-        cmd = "rpm -ivh /root/epel-release-latest-8.noarch.rpm"
+        cmd = "rpm -ivh epel-release-latest-8.noarch.rpm"
         os.system(cmd)
         
     elif sys == 2:
         total_remote_sys = int(input("Enter the number of remote systems: "))
         for i in range(total_remote_sys):
             remote_sys_IP = input("Enter Remote System's IP: ")
-            cmd = "scp /root/epel-release-latest-8.noarch.rpm root@" + remote_sys_IP + ":/root"
+            cmd = "scp epel-release-latest-8.noarch.rpm root@" + remote_sys_IP + ":/root"
             os.system(cmd)
             print('\n--------------Updating yum repository--------------\n')
             cmd = "ssh root@" + remote_sys_IP + " rpm -ivh /root/epel-release-latest-8.noarch.rpm"
