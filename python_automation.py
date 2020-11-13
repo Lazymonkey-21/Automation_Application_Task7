@@ -481,7 +481,7 @@ while True:
         hapoop_services()
     
     elif user_choice1 == 3:
-        Aws_cli()
+	Aws_cli()
 
     elif user_choice1 == 4:
         docker()
