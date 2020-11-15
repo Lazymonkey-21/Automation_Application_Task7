@@ -138,7 +138,7 @@ def config_hadoop():
     dnn = int(input("Number of Data Nodes: "))
     for i in range(dnn):
         dn = input("Enter Data Node {}'s IP: ".format(i+1))
-        dn_dir = '/dn' + (i+1)
+        dn_dir = '/dn' + str(i+1)
         hadoop_pyscript(dn, 'dfs.data.dir', dn_dir, 'D', i+1)
 
     client = int(input("Number of Client Nodes: "))
