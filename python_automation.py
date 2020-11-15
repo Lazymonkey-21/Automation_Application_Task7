@@ -74,7 +74,7 @@ It may take a bit longer, please don't quit
         print("Invalid Input")
 
 
-def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
+def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no, curr_ip):
     ip = '"' + ip + '"'
     line_8 = 'nn_ip = ' + ip + '\n'
     line_9 = 'file_handling("' + hdfs_name_tag + '", "'+ hdfs_value_tag + '", "hdfs-site.xml")\n'
@@ -125,26 +125,26 @@ def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
     hdfs_file.writelines(pyscript)
     hdfs_file.close()
 
-    cmd = "scp imp.py root@" + ip + ":/root"
+    cmd = "scp imp.py root@" + curr_ip + ":/root"
     os.system(cmd)
-    cmd = "ssh root@" + ip + " python3 /root/imp.py"
+    cmd = "ssh root@" + curr_ip + " python3 /root/imp.py"
     os.system(cmd)
 
 
 def config_hadoop():
     nn = input("Enter Name Node's IP: ")
-    hadoop_pyscript(nn, 'dfs.name.dir', '/nn', 'N', 0)
+    hadoop_pyscript(nn, 'dfs.name.dir', '/nn', 'N', 0, nn)
 
     dnn = int(input("Number of Data Nodes: "))
     for i in range(dnn):
         dn = input("Enter Data Node {}'s IP: ".format(i+1))
         dn_dir = '/dn' + str(i+1)
-        hadoop_pyscript(dn, 'dfs.data.dir', dn_dir, 'D', i+1)
+        hadoop_pyscript(nn, 'dfs.data.dir', dn_dir, 'D', i+1, dn)
 
     client = int(input("Number of Client Nodes: "))
     for i in range(client):
         client_ip = input("Enter Client {}'s IP: ".format(i+1))
-        hadoop_pyscript(client_ip, '', '', 'C', 0)
+        hadoop_pyscript(nn, '', '', 'C', 0, client_ip)
 
 
 def hadoop_client_services(ip):
