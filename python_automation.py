@@ -111,7 +111,7 @@ def hadoop_pyscript(ip, hdfs_name_tag, hdfs_value_tag, node_type, dn_no):
         pyscript.append('\nos.system("systemctl stop firewalld")')
         pyscript.append('\nos.system("hadoop-daemon.sh start namenode")')
     elif node_type == 'D':
-        cmd = 'rm -rf /dn' + str(dn_no)
+        cmd = 'os.system("rm -rf /dn' + str(dn_no) + '")'
         pyscript.append(cmd)
         cmd = '\nos.system("mkdir /dn'+ str(dn_no) +'")'
         pyscript.append(cmd)
